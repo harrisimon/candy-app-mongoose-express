@@ -83,6 +83,19 @@ router.patch('/candies/:id', requireToken, removeBlanks, (req, res, next) => {
 		.catch(next)
 })
 
+//Destroy
+// DELETE /candies/:id
+router.delete('/candies/:id', requireToken, (req, res, next) => {
+	Candy.findById(req.params.id)
+		.then(handle404)
+		.then((candy) => {
+			requireOwnership(req, candy)
+			candy.deleteOne()
+		})
+		.then(() => res.sendStatus(204))
+		.catch(next)
+})
+
 
 
 module.exports = router
